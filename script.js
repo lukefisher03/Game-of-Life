@@ -7,6 +7,16 @@
  * 4. Any live cell with more than 3 live neighbors dies
  */
 
+/*
+board = [
+[Cell, Cell, Cell, ...],
+[Cell, Cell, Cell, ...],
+[Cell, Cell, Cell, ...],
+[Cell, Cell, Cell, ...],
+...
+]
+*/
+
 let main_canvas = document.getElementById("main-canvas")
 let start_sim = document.getElementById("start")
 let ctx = main_canvas.getContext("2d")
@@ -58,19 +68,9 @@ function drawGrid() {//We need to split the drawing from the creation of the gri
     }
 }
 
-createGrid()//build our 2d array as such:
-/*
-board = [
-[Cell, Cell, Cell, ...],
-[Cell, Cell, Cell, ...],
-[Cell, Cell, Cell, ...],
-[Cell, Cell, Cell, ...],
-...
-]
-*/
-
 function buildNextGeneration(x,y) {//Takes in a Cell object
     cell = board[x][y]
+    new_board = []
     //Create 2 arrayrs around a given cell that tell you how many living vs dead cells surround you.
     living_cells_surrounding = []
 
@@ -158,22 +158,11 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
         }
     }
 
-    if(cell.life == 1) {
-        living_cells_surrounding.pop()//If the original cell was living, don't count that in the living cells array. 
-        if(living_cells_surrounding.length < 2) {
-            cell.life = 0
-        }else if(living_cells_surrounding.length > 3) { 
-            cell.life = 0
-        }
-    }else {
-        if(living_cells_surrounding.length == 3) {
-            cell.life = 1
-        }
-
+    if(cell.life == 1){
+        living_cells_surrounding.pop()
     }
-    
-    console.log(living_cells_surrounding.length)
-    //Now we use those array values to tell if a cell will survive or die
+
+    return living_cells_surrounding.length
     
 }
 
@@ -208,16 +197,53 @@ start_sim.addEventListener("click", () => {
 })
 
 //board[4][4].life = 1
+
+createGrid()//build our 2d array as such:
 function draw() {//the draw loop which we'll run our main animation through.
+    cells_to_resurrect = []
+    cells_to_kill = []
     ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
     if(building) { 
        for(let i = 0; i < board.length; i++){
            for(let i2 = 0; i2 < board[0].length; i2++){
-              buildNextGeneration(i,i2)
+                this_cell = board[i][i2]
+                cell_count = buildNextGeneration(i,i2)
+                if(this_cell.life == 1) {
+                        if(cell_count < 2) {
+                            cells_to_kill.push(this_cell)
+                        }else if(cell_count > 3) { 
+                            cells_to_kill.push(this_cell)
+                        }
+                }else {
+                    if(cell_count == 3) {
+                        cells_to_resurrect.push(this_cell)
+                    }
+                }
+                
            }
        }
+    }
+
+    for (let i = 0; i < cells_to_resurrect.length; i++) {
+        cells_to_resurrect[i].life = 1
+    }
+    
+    for (let i = 0; i < cells_to_kill.length; i++) {
+        cells_to_kill[i].life = 0
     }
     drawGrid()
     window.requestAnimationFrame(draw)
 }
 window.requestAnimationFrame(draw)
+
+// if(this_cell.life == 1) {
+//     if(cell_count < 2) {
+//         cell.life = 0
+//     }else if(living_cells_surrounding.length > 3) { 
+//         cell.life = 0
+//     }
+// }else {
+//     if(living_cells_surrounding.length == 3) {
+//         cell.life = 1
+//     }
+// }
