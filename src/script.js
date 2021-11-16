@@ -7,15 +7,6 @@
  * 4. Any live cell with more than 3 live neighbors dies
  */
 
-/*
-board = [
-[Cell, Cell, Cell, ...],
-[Cell, Cell, Cell, ...],
-[Cell, Cell, Cell, ...],
-[Cell, Cell, Cell, ...],
-...
-]
-*/
 
 let main_canvas = document.getElementById("main-canvas")
 let start_sim = document.getElementById("start")
@@ -26,6 +17,16 @@ size = [50,50]//You will be able to zoom in our out using the size feature in a 
 ts = 20//Tile size
 editing_allowed = true
 building = false
+
+/*
+board = [
+[Cell, Cell, Cell, ...],
+[Cell, Cell, Cell, ...],
+[Cell, Cell, Cell, ...],
+[Cell, Cell, Cell, ...],
+...
+]
+*/
 board = []
 
 class Cell {
@@ -235,15 +236,3 @@ function draw() {//the draw loop which we'll run our main animation through.
     window.requestAnimationFrame(draw)
 }
 window.requestAnimationFrame(draw)
-
-// if(this_cell.life == 1) {
-//     if(cell_count < 2) {
-//         cell.life = 0
-//     }else if(living_cells_surrounding.length > 3) { 
-//         cell.life = 0
-//     }
-// }else {
-//     if(living_cells_surrounding.length == 3) {
-//         cell.life = 1
-//     }
-// }
