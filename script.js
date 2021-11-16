@@ -1,9 +1,19 @@
+/**
+ * Rules for building generations
+ * 
+ * 1. Any living cell with less than 2 live neighbors dies
+ * 2. Any living cell with 2 or 3 live neighbors continues to be alive
+ * 3. Any dead cell with three live neighbors becomes a live cell
+ * 4. Any live cell with more than 3 live neighbors dies
+ */
+
 let main_canvas = document.getElementById("main-canvas")
 let ctx = main_canvas.getContext("2d")
 
 // [rows, columns]
 size = [10,10]//You will be able to zoom in our out using the size feature in a later implementation.
 ts = 20//Tile size
+
 board = []
 
 class Cell {
@@ -14,7 +24,7 @@ class Cell {
     }
 
     make() {
-        if(this.life == 0) {
+        if(this.life == 0) {//Draw two different things depending on if the cell is alive or not.
             ctx.shadowBlur = 0
             ctx.strokeStyle = "rgb(94, 94, 94)"
             ctx.strokeRect(this.x,this.y,ts,ts)
@@ -47,16 +57,26 @@ function drawGrid() {//We need to split the drawing from the creation of the gri
 }
 
 console.log(board)
-
 test_cell = new Cell(100,100)
-createGrid()
+createGrid()//build our 2d array as such:
+/*
+board = [
+[Cell, Cell, Cell, ...]
+[]
+[]
+...
+]
+*/
+//click events to be able to edit the first generation
 main_canvas.addEventListener("click", (event) => {
-    let coors = [event.clientX, event.clientY]
+    let coors = [event.clientX, event.clientY]//store the user's x,y coordinate in an array
     for(i = 0; i < board.length; i++) {
         for(let i2 = 0; i2 < board[0].length; i2++) {
-            if(coors[0] > board[i][i2].x && coors[0] < board[i][i2].x + ts && coors[1] > board[i][i2].y && coors[1] < board[i][i2].y + ts) {
-                if(board[i][i2].life == 0) {   
+            if(coors[0] > board[i][i2].x && coors[0] < board[i][i2].x + ts && coors[1] > board[i][i2].y && coors[1] < board[i][i2].y + ts) {//test if the user is clicking on a square
+                //if the tile was dead before, bring it to life
+                if(board[i][i2].life == 0) { 
                     board[i][i2].life = 1
+                //if it was living before, kill it.
                 }else if(board[i][i2].life == 1) {
                     board[i][i2].life = 0
                 }
@@ -66,15 +86,10 @@ main_canvas.addEventListener("click", (event) => {
     
 
 })
-function draw() {
-    ctx.clearRect(0, 0, 1000, 1000); // clear canvas
-    
-
+function draw() {//the draw loop which we'll run our main animation through.
+    ctx.clearRect(0, 0, 1000, 1000); // make sure to clear the grid so that old generations disappear.
 
     drawGrid()
     window.requestAnimationFrame(draw)
 }
-console.log(board[4][5].x)
-
-
 window.requestAnimationFrame(draw)
