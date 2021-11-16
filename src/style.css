@@ -8,7 +8,7 @@ body {
     background-color: rgb(21, 31, 48);
 }
 
-#start {
+.btn {
     margin:10px;
     display: block;
     width: 140px;
@@ -21,6 +21,6 @@ body {
     background-color: transparent;
 }
 
-#start:hover {
+.btn:hover {
     cursor: pointer;
 }
