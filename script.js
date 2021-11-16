@@ -12,7 +12,7 @@ let start_sim = document.getElementById("start")
 let ctx = main_canvas.getContext("2d")
 
 // [rows, columns]
-size = [11,11]//You will be able to zoom in our out using the size feature in a later implementation.
+size = [50,50]//You will be able to zoom in our out using the size feature in a later implementation.
 ts = 20//Tile size
 editing_allowed = true
 building = false
@@ -58,7 +58,6 @@ function drawGrid() {//We need to split the drawing from the creation of the gri
     }
 }
 
-test_cell = new Cell(100,100)
 createGrid()//build our 2d array as such:
 /*
 board = [
@@ -76,8 +75,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
     living_cells_surrounding = []
 
     if(x == 0 && y == 0) {//The upper left hand corner of the grid
-        for(i = 0; i < 3; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
-            for(i2 = 0; i2 < 3; i2++){
+        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+            for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x)+i][(y)+i2]
                 if(surrounding_cell.life == 1) {
                     living_cells_surrounding.push(surrounding_cell)
@@ -96,7 +95,7 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
     }else if(x == size[0]-1 && y == size[1]-1){ //bottom right hand corner
         for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
             for(i2 = 0; i2 < 2; i2++){
-                surrounding_cell = board[(x-1)+i][(y)+i2]
+                surrounding_cell = board[(x-1)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
                     living_cells_surrounding.push(surrounding_cell)
                 }
@@ -139,6 +138,15 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
+    }else if(x == size[0]-1 && y == 0) {//The upper right hand corner of the grid
+        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+            for(i2 = 0; i2 < 2; i2++){
+                surrounding_cell = board[(x-1)+i][(y)+i2]
+                if(surrounding_cell.life == 1) {
+                    living_cells_surrounding.push(surrounding_cell)
+                }
+            }
+        }
     }else {
         for(i = 0; i < 3; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
             for(i2 = 0; i2 < 3; i2++){
@@ -149,16 +157,13 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
             }
         }
     }
-    
+
     if(cell.life == 1) {
         living_cells_surrounding.pop()//If the original cell was living, don't count that in the living cells array. 
         if(living_cells_surrounding.length < 2) {
             cell.life = 0
         }else if(living_cells_surrounding.length > 3) { 
             cell.life = 0
-
-        }else if(living_cells_surrounding.length == 2 || living_cells_surrounding.length == 3) {
-            cell.life = 1
         }
     }else {
         if(living_cells_surrounding.length == 3) {
@@ -189,7 +194,7 @@ main_canvas.addEventListener("click", (event) => {
         }
     }
 
-  // buildNextGeneration(5,10)
+  // buildNextGeneration(3,3)
 })
 
 start_sim.addEventListener("click", () => {
@@ -202,15 +207,9 @@ start_sim.addEventListener("click", () => {
     }
 })
 
-for(let i = 0; i < board.length; i++) {
-    for(let i2 = 0; i2 < board[0].length; i2++) {
-       console.log(i + ": " + i2 )
-    }
-}
-
-//board[5][10].life = 1
+//board[4][4].life = 1
 function draw() {//the draw loop which we'll run our main animation through.
-    ctx.clearRect(0, 0, 1000, 1000); // make sure to clear the grid so that old generations disappear.
+    ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
     if(building) { 
        for(let i = 0; i < board.length; i++){
            for(let i2 = 0; i2 < board[0].length; i2++){
