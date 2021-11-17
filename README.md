@@ -35,8 +35,8 @@ My recent interest in *life* has lead me to attempt to replicate it in the form 
 - Martin Gardner's Article on *Life* https://web.stanford.edu/class/sts145/Library/life.pdf
 
 ###### Some Interesting Links relating to *Life*
-- Working Tetris https://codegolf.stackexchange.com/questions/11880/build-a-working-game-of-tetris-in-conways-game-of-life/142673#142673
-- Census Results in Conway's Life https://web.archive.org/web/20090910010855/http://conwaylife.com/soup/census.asp?rule=B3%2FS23&sl=1&os=1&ss=1
-- The Turing Completeness https://www.youtube.com/watch?v=Kk2MH9O4pXY
-- Digital Clock https://www.youtube.com/watch?v=3NDAZ5g4EuU
+- <a href="https://codegolf.stackexchange.com/questions/11880/build-a-working-game-of-tetris-in-conways-game-of-life/142673#142673">Working Tetris</a> 
+- <a href="https://web.archive.org/web/20090910010855/http://conwaylife.com/soup/census.asp?rule=B3%2FS23&sl=1&os=1&ss=1">Census Results in Conway's Life</a>
+- <a href="https://www.youtube.com/watch?v=Kk2MH9O4pXY">The Turing Completeness</a>
+- <a href="https://www.youtube.com/watch?v=3NDAZ5g4EuU">Digital Clock</a>
 
