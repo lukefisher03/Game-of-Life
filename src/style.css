@@ -1,12 +1,17 @@
 #main-canvas {
     background-color: rgb(21, 31, 48);
+    border: 3px solid white;
+    display: inline-block;
 }
 
 body {
-    margin:0px;
+    color:white;
     padding:0px;
+    margin:0px;
     background-color: rgb(21, 31, 48);
 }
+
+
 
 .btn {
     margin:10px;
@@ -23,4 +28,9 @@ body {
 
 .btn:hover {
     cursor: pointer;
+}
+
+#btn-container {
+    margin:50px;
+    display: inline-block;
 }

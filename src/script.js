@@ -14,8 +14,8 @@ let ctx = main_canvas.getContext("2d")
 let get_random = document.getElementById("random")
 
 // [rows, columns]
-let size = [100,100]//You will be able to zoom in our out using the size feature in a later implementation.
-let ts = 10//Tile size
+let size = [200,200]//You will be able to zoom in our out using the size feature in a later implementation.
+let ts = 7//Tile size
 let editing_allowed = true
 let building = false
 let random_colors = false
@@ -67,8 +67,6 @@ function createGrid() {
         board.push(row)
     }
 }
-
-
 
 function drawGrid() {//We need to split the drawing from the creation of the grid so that we can modify values in between.
     for(let i = 0; i < board.length; i++){
@@ -200,13 +198,13 @@ start_sim.addEventListener("click", () => {
     if(!building) {
         building = true
         console.log("Building simulation!")
+        start_sim.innerText = "Stop Generation"
     }else {
         building = false
         console.log("Stopping the building!")
+        start_sim.innerText = "Start Generation"
     }
 })
-
-//board[4][4].life = 1
 
 createGrid()//build our 2d array as such:
 get_random.addEventListener("click", (event) => {
@@ -239,9 +237,8 @@ function draw() {//the draw loop which we'll run our main animation through.
                         cells_to_resurrect.push(this_cell)
                     }
                 }
-                
-           }
-       }
+            }
+        }
     }
 
     for (let i = 0; i < cells_to_resurrect.length; i++) {
@@ -251,6 +248,7 @@ function draw() {//the draw loop which we'll run our main animation through.
     for (let i = 0; i < cells_to_kill.length; i++) {
         cells_to_kill[i].life = 0
     }
+
     drawGrid()
     window.requestAnimationFrame(draw)
 }
