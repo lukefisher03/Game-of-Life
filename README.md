@@ -4,6 +4,7 @@ this wonderfully delightful simulation, I've employed the modern day processing 
 invented using a Go board. But first, what are the rules to this simple game?
 
 ### The Rules
+
 The rules are simple and straightforward. They go as follows:
 1. **Survivals**. Every counter (or cell or block or whatever you wish to call it) with two or three neighboring counters survives for the next generation.
 2. **Deaths**. Each counter with four or more neighbors dies (is removed) from overpopulation. Every
@@ -14,6 +15,7 @@ counter is placed on it at the next move.
 These simple rules open up an infinite number of possible mutations and configurations.
 
  ### The Background
+ 
  *Life* was first recognized and popularized in the October 1970 edition of *The Scientific American*, written by Martin Gardner. In a recent video about *Life*, 
  John Conway himself describes how this first issue on his simple game became wildly popular. Here's how Gardner described the game
  >  This month we consider Conway's latest brainchild, a fantastic solitaire pastime he calls "life". Because of its analogies with the rise, fall and alternations of a society of living organisms, it belongs to a growingclass of what are called "simulation games"--games that resemble real-life processes (Gardner 3). 
