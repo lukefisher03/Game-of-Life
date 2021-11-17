@@ -11,12 +11,15 @@
 let main_canvas = document.getElementById("main-canvas")
 let start_sim = document.getElementById("start")
 let ctx = main_canvas.getContext("2d")
+let get_random = document.getElementById("random")
 
 // [rows, columns]
-size = [50,50]//You will be able to zoom in our out using the size feature in a later implementation.
-ts = 20//Tile size
-editing_allowed = true
-building = false
+let size = [200,200]//You will be able to zoom in our out using the size feature in a later implementation.
+let ts = 7//Tile size
+let editing_allowed = true
+let building = false
+let random_colors = false
+
 
 /*
 board = [
@@ -44,7 +47,11 @@ class Cell {
         }else {
             ctx.shadowBlur = 5 //Add the white "glow effect" around each box
             ctx.shadowColor = "white"
-            ctx.fillStyle = "rgb(255,255,255)"
+            if(random_colors) { 
+                ctx.fillStyle = "rgb("+ Math.floor(Math.random()*255) + ", " + Math.floor(Math.random()*255) + ", " + Math.floor(Math.random()*255) + ")"
+            }else {
+                ctx.fillStyle = "white"
+            }
             ctx.fillRect(this.x,this.y,ts,ts)
         }  
     }
@@ -191,15 +198,25 @@ start_sim.addEventListener("click", () => {
     if(!building) {
         building = true
         console.log("Building simulation!")
+        start_sim.innerText = "Stop Generation"
     }else {
         building = false
         console.log("Stopping the building!")
+        start_sim.innerText = "Start Generation"
     }
 })
 
-//board[4][4].life = 1
-
 createGrid()//build our 2d array as such:
+get_random.addEventListener("click", (event) => {
+    ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
+    for(let i = 0; i < board.length; i++) {
+        for(let i2 = 0; i2 < board[0].length; i2++) {
+            console.log(Math.floor(Math.random()*2))
+            board[i][i2].life = Math.floor(Math.random()*2)
+        }
+    }
+})
+
 function draw() {//the draw loop which we'll run our main animation through.
     cells_to_resurrect = []
     cells_to_kill = []
@@ -220,9 +237,8 @@ function draw() {//the draw loop which we'll run our main animation through.
                         cells_to_resurrect.push(this_cell)
                     }
                 }
-                
-           }
-       }
+            }
+        }
     }
 
     for (let i = 0; i < cells_to_resurrect.length; i++) {
@@ -232,6 +248,7 @@ function draw() {//the draw loop which we'll run our main animation through.
     for (let i = 0; i < cells_to_kill.length; i++) {
         cells_to_kill[i].life = 0
     }
+
     drawGrid()
     window.requestAnimationFrame(draw)
 }
