@@ -31,8 +31,8 @@ My recent interest in *life* has lead me to attempt to replicate it in the form 
 
 
 ###### References
-- Numberphile Interview with John Conway https://www.youtube.com/watch?v=R9Plq-D1gEk
-- Martin Gardner's Article on *Life* https://web.stanford.edu/class/sts145/Library/life.pdf
+- <a href="https://www.youtube.com/watch?v=R9Plq-D1gEk">Numberphile Interview with John Conway</a>
+- <a href="https://web.stanford.edu/class/sts145/Library/life.pdf">Martin Gardner's Article on *Life*</a>
 
 ###### Some Interesting Links relating to *Life*
 - <a href="https://codegolf.stackexchange.com/questions/11880/build-a-working-game-of-tetris-in-conways-game-of-life/142673#142673">Working Tetris</a> 
