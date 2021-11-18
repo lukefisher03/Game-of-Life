@@ -16,7 +16,7 @@ let ctx = main_canvas.getContext("2d")
 let get_random = document.getElementById("random")
 
 // [rows, columns]
-let size = [150,300]//You will be able to zoom in our out using the size feature in a later implementation.
+let size = [150,220]//You will be able to zoom in our out using the size feature in a later implementation.
 let ts = 7//Tile size
 let editing_allowed = true
 let building = false
@@ -186,7 +186,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
 
 //click events to be able to edit the first generation
 main_canvas.addEventListener("click", (event) => {
-    let coors = [event.clientX, event.clientY]//store the user's x,y coordinate in an array
+    console.log(main_canvas.getBoundingClientRect().top)
+    let coors = [event.clientX - main_canvas.getBoundingClientRect().left, event.clientY - main_canvas.getBoundingClientRect().top]//store the user's x,y coordinate in an array
     for(let i = 0; i < board.length; i++) {
         for(let i2 = 0; i2 < board[0].length; i2++) {
             if(coors[0] > board[i][i2].x && coors[0] < board[i][i2].x + ts && coors[1] > board[i][i2].y && coors[1] < board[i][i2].y + ts) {//test if the user is clicking on a square
