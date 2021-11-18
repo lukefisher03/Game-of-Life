@@ -1,3 +1,6 @@
+//Conway's Game of Life
+//By Luke Fisher
+
 /**
  * Rules for building generations
  * 
@@ -7,14 +10,13 @@
  * 4. Any live cell with more than 3 live neighbors dies
  */
 
-
 let main_canvas = document.getElementById("main-canvas")
 let start_sim = document.getElementById("start")
 let ctx = main_canvas.getContext("2d")
 let get_random = document.getElementById("random")
 
 // [rows, columns]
-let size = [200,200]//You will be able to zoom in our out using the size feature in a later implementation.
+let size = [150,300]//You will be able to zoom in our out using the size feature in a later implementation.
 let ts = 7//Tile size
 let editing_allowed = true
 let building = false
@@ -77,13 +79,20 @@ function drawGrid() {//We need to split the drawing from the creation of the gri
 }
 
 function buildNextGeneration(x,y) {//Takes in a Cell object
-    cell = board[x][y]
-    new_board = []
+    let cell = board[x][y]
+    let new_board = []
     //Create 2 arrayrs around a given cell that tell you how many living vs dead cells surround you.
-    living_cells_surrounding = []
+    let living_cells_surrounding = []
+
+    /* 
+    * The game depends on counting living and dead cells around a given cell to determine it's "destiny". 
+    * However, at the edges and corners of the grid there's a different number of cells surrounding one. For example: normally a cell will have
+    * 8 surrounding cells. But, at the edges it will have 5. And in the corners, it will have 3. These conditionals check for the position of the
+    * selected cell and adjust accordingly.
+    */
 
     if(x == 0 && y == 0) {//The upper left hand corner of the grid
-        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+        for(i = 0; i < 2; i++) {
             for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x)+i][(y)+i2]
                 if(surrounding_cell.life == 1) {
@@ -91,8 +100,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
-    }else if(x != 0 && x != size[0]-1 && y == 0) {//in between the two top corners
-        for(i = 0; i < 3; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x != 0 && x != size[1]-1 && y == 0) {//in between the two top corners
+        for(i = 0; i < 3; i++) {
             for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x-1)+i][y+i2]
                 if(surrounding_cell.life == 1) {
@@ -100,8 +109,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
-    }else if(x == size[0]-1 && y == size[1]-1){ //bottom right hand corner
-        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x == size[1]-1 && y == size[0]-1){ //bottom right hand corner
+        for(i = 0; i < 2; i++) {
             for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x-1)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
@@ -110,8 +119,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
             }
         }
 
-    }else if(x == size[0]-1 && y != size[1]-1 && y != 0){//right side
-        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x == size[1]-1 && y != size[0]-1 && y != 0){//right side
+        for(i = 0; i < 2; i++) {
             for(i2 = 0; i2 < 3; i2++){
                 surrounding_cell = board[(x-1)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
@@ -119,8 +128,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
-    }else if(x == 0 && y != 0 && y != size[1]-1){//left side
-        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x == 0 && y != 0 && y != size[0]-1){//left side
+        for(i = 0; i < 2; i++) {
             for(i2 = 0; i2 < 3; i2++){
                 surrounding_cell = board[(x)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
@@ -128,8 +137,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
-    }else if(x == 0 && y == size[1]-1) {//The bottom left hand corner
-        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x == 0 && y == size[0]-1) {//The bottom left hand corner
+        for(i = 0; i < 2; i++) {
             for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
@@ -137,8 +146,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
-    }else if(x != 0 && x != size[0]-1 && y == size[1]-1) {//in between two bottom corners
-        for(i = 0; i < 3; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x != 0 && x != size[1]-1 && y == size[0]-1) {//in between two bottom corners
+        for(i = 0; i < 3; i++) {
             for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x-1)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
@@ -146,8 +155,8 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
                 }
             }
         }
-    }else if(x == size[0]-1 && y == 0) {//The upper right hand corner of the grid
-        for(i = 0; i < 2; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+    }else if(x == size[1]-1 && y == 0) {//The upper right hand corner of the grid
+        for(i = 0; i < 2; i++) {
             for(i2 = 0; i2 < 2; i2++){
                 surrounding_cell = board[(x-1)+i][(y)+i2]
                 if(surrounding_cell.life == 1) {
@@ -156,7 +165,7 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
             }
         }
     }else {
-        for(i = 0; i < 3; i++) {//Create a 3x3 grid around the active cell to be able to see if they're living or not
+        for(i = 0; i < 3; i++) {//everything else
             for(i2 = 0; i2 < 3; i2++){
                 surrounding_cell = board[(x-1)+i][(y-1)+i2]
                 if(surrounding_cell.life == 1) {
@@ -166,12 +175,13 @@ function buildNextGeneration(x,y) {//Takes in a Cell object
         }
     }
 
+    //If the cell that's being tested for the rules is alive, don't count it as a live surrounding cell.
     if(cell.life == 1){
         living_cells_surrounding.pop()
     }
 
+    //In the end all we care about is how many cells are alive or dead around a given cell. In this case, that's all we return.
     return living_cells_surrounding.length
-    
 }
 
 //click events to be able to edit the first generation
@@ -194,7 +204,7 @@ main_canvas.addEventListener("click", (event) => {
   // buildNextGeneration(3,3)
 })
 
-start_sim.addEventListener("click", () => {
+start_sim.addEventListener("click", () => {//Mechanics behind the start/stop button
     if(!building) {
         building = true
         console.log("Building simulation!")
@@ -221,12 +231,14 @@ function draw() {//the draw loop which we'll run our main animation through.
     cells_to_resurrect = []
     cells_to_kill = []
     ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
-    if(building) { 
+    
+    //Process the game rules here:
+    if(building) { //Make sure the start generation button is enabled.
        for(let i = 0; i < board.length; i++){
-           for(let i2 = 0; i2 < board[0].length; i2++){
+           for(let i2 = 0; i2 < board[0].length; i2++){//loop through each cell
                 this_cell = board[i][i2]
-                cell_count = buildNextGeneration(i,i2)
-                if(this_cell.life == 1) {
+                cell_count = buildNextGeneration(i,i2)//find out how many cells are surrounding the given cell.
+                if(this_cell.life == 1) {//if it's alive, process the rules below.
                         if(cell_count < 2) {
                             cells_to_kill.push(this_cell)
                         }else if(cell_count > 3) { 
@@ -241,6 +253,10 @@ function draw() {//the draw loop which we'll run our main animation through.
         }
     }
 
+    /* The game is structured so that all of the changes are made AFTER the processing of what cells live or die. 
+    * If the loop is checking cell A and sees that it should die, the death of cell A shouldn't affect the life or death of
+    * cell B until the next generation. This is a crucial part of the rules, and why I don't just kill the cell in the code above.
+    */
     for (let i = 0; i < cells_to_resurrect.length; i++) {
         cells_to_resurrect[i].life = 1
     }
@@ -249,7 +265,8 @@ function draw() {//the draw loop which we'll run our main animation through.
         cells_to_kill[i].life = 0
     }
 
-    drawGrid()
+    drawGrid()//Drawing the grid comes AFTER everything else.
     window.requestAnimationFrame(draw)
 }
+
 window.requestAnimationFrame(draw)
