@@ -12,11 +12,9 @@ body {
     background-color: rgb(21, 31, 48);
 }
 
-
-
 .btn {
     margin:10px;
-    display: block;
+    display: inline-block;
     width: 140px;
     height: 50px;
     border-radius: 10px;
@@ -33,5 +31,5 @@ body {
 
 #btn-container {
     margin:50px;
-    display: inline-block;
+    display: block;
 }
