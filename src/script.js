@@ -68,7 +68,7 @@ class Cell {
 };
 
 function createGrid() {
-    for (let i = 0; i < size[1]; i++) {
+    for (let i = 0; i < size[1]; i++) { //create a 2d array representing the grid.
         let row = [];
         for (let i2 = 0; i2 < size[0]; i2++) {
             let cell = new Cell(i * ts, i2 * ts); //each time i call create board 
@@ -78,7 +78,7 @@ function createGrid() {
     };
 };
 
-function init() {
+function init() { //Init function to run all of the stuff in the beginning.
     c_dimensions = [window.innerWidth - 100, window.innerHeight * (0.75)];
     main_canvas.width = c_dimensions[0];
     main_canvas.height = c_dimensions[1];
@@ -87,11 +87,6 @@ function init() {
     size = [(c_dimensions[1] / ts), (c_dimensions[0] / ts)];
     board = [];
     createGrid();
-}
-
-init();
-ts_slider.oninput = function() {
-    init();
 }
 
 function drawGrid() { //We need to split the drawing from the creation of the grid so that we can modify values in between.
@@ -137,13 +132,33 @@ function buildNextGeneration(x, y) { //Takes in a Cell object
     return living_cells_surrounding;
 }
 
+function get_random_layout() {
+    ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
+    for (let i = 0; i < board.length; i++) {
+        for (let i2 = 0; i2 < board[0].length; i2++) {
+            board[i][i2].life = Math.floor(Math.random() * 2);
+        };
+    };
+};
+
+get_random.addEventListener("click", () => {
+    get_random_layout();
+});
+
+clear_canvas.addEventListener("click", () => {
+    for (let i = 0; i < board.length; i++) {
+        for (let i2 = 0; i2 < board[0].length; i2++) {
+            board[i][i2].life = 0;
+        };
+    };
+});
+
 //click events to be able to edit the first generation
 main_canvas.addEventListener("click", (event) => {
-    
     let coors = [event.clientX - main_canvas.getBoundingClientRect().left, event.clientY - main_canvas.getBoundingClientRect().top] //store the user's x,y coordinate in an array
     for (let i = 0; i < board.length; i++) {
         for (let i2 = 0; i2 < board[0].length; i2++) {
-            if(coors[0] > board[i][i2].x && coors[0] < board[i][i2].x + ts && coors[1] > board[i][i2].y && coors[1] < board[i][i2].y + ts) { //test if the user is clicking on a square
+            if (coors[0] > board[i][i2].x && coors[0] < board[i][i2].x + ts && coors[1] > board[i][i2].y && coors[1] < board[i][i2].y + ts) { //test if the user is clicking on a square
                 clicked_cell = board[i][i2];
             };
         };
@@ -171,34 +186,17 @@ start_sim.addEventListener("click", () => { //Mechanics behind the start/stop bu
     };
 });
 
-function get_random_layout() {
-    ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
-    for (let i = 0; i < board.length; i++) {
-        for (let i2 = 0; i2 < board[0].length; i2++) {
-            board[i][i2].life = Math.floor(Math.random() * 2);
-        };
-    };
-};
+init();
+ts_slider.oninput = function () {
+    init();
+}
 get_random_layout();
 
-get_random.addEventListener("click", () => {
-    get_random_layout();
-});
-
-clear_canvas.addEventListener("click", () => {
-    for (let i = 0; i < board.length; i++) {
-        for (let i2 = 0; i2 < board[0].length; i2++) {
-            board[i][i2].life = 0;
-        };
-    };
-});
-
-
-function draw() { //the draw loop which we'll run our main animation through.
+function draw() { //the draw loop which we'll run our main animation through. Anything in this function gets looped every ms or as fast as it can update.
     cells_to_resurrect = [];
     cells_to_kill = [];
     ctx.clearRect(0, 0, main_canvas.clientWidth, main_canvas.clientHeight); // make sure to clear the grid so that old generations disappear.
-
+    
     //Process the game rules here:
     if (building) { //Make sure the start generation button is enabled.
         for (let i = 0; i < board.length; i++) {
@@ -232,7 +230,7 @@ function draw() { //the draw loop which we'll run our main animation through.
         cells_to_kill[i].life = 0;
     };
 
-    drawGrid();//Drawing the grid comes AFTER everything else.
+    drawGrid(); //Drawing the grid comes AFTER everything else.
     window.requestAnimationFrame(draw);
 }
 
