@@ -11,9 +11,14 @@
     <canvas id = "main-canvas"></canvas>
 
     <div id="btn-container">
-        <button id = "start" class = "btn">Start Generation</button>
-        <button id = "random" class = "btn">Generate Random</button>
-        <button id = "clear" class = "btn">Clear Grid</button>
+        <button id="start" class="btn">Start Generation</button>
+        <button id="random" class="btn">Generate Random</button>
+        <button id="clear" class="btn">Clear Grid</button>
+        <div id="slider-container">
+            <h3 id="ts_label">Tile Size: </h3>
+            <input id="ts_slider" type="range" min="5" max="15" step="0.1">
+        </div>
     </div>
+    
     <script src="script.js"></script>
 </body>
